@@ -25,3 +25,16 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    App\RequestHandler\:
+        resource: '../src/RequestHandler'
+        arguments: ['@maxbeckers_amazon_alexa.response_helper'] # ResponseHelper
+        tags: ['maxbeckers_amazon_alexa.request_handler']
+        
+    maxbeckers_amazon_alexa.request_transformer:
+        class: MaxBeckers\AmazonAlexaBundle\RequestTransformer\RequestTransformer
+        public: true
+        arguments:
+            - '@maxbeckers_amazon_alexa.request_handler_registry'
+            - '@maxbeckers_amazon_alexa.request_validator'
+            - '@request_stack'

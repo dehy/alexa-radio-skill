@@ -5,7 +5,7 @@ server {
     error_log /dev/stderr info;
     access_log /dev/null;
 
-    root /var/www/project/public;
+    root /var/www/public;
 
     location / {
         # try to serve file directly, fallback to index.php

@@ -16,7 +16,7 @@ ENV APP_ID ""
 VOLUME /var/www/var
 WORKDIR /var/www
 
-HEALTHCHECK --interval=30s --timeout=30s --start-period=45s --retries=3 CMD [ "/usr/local/bin/healthcheck.sh" ]
+#HEALTHCHECK --interval=30s --timeout=30s --start-period=45s --retries=3 CMD [ "/usr/local/bin/healthcheck.sh" ]
 
 COPY docker/setup /setup
 RUN bash /setup/setup.sh

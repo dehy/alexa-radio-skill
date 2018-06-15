@@ -14,7 +14,10 @@
     },
     "require-dev": {
         "symfony/dotenv": "^4.1",
-        "symfony/web-server-bundle": "^4.1"
+        "symfony/twig-bundle": "^4.1",
+        "symfony/web-profiler-bundle": "^4.1",
+        "symfony/web-server-bundle": "^4.1",
+        "twig/twig": "^2.4"
     },
     "config": {
         "preferred-install": {

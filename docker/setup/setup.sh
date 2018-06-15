@@ -20,6 +20,7 @@ apt-get dist-upgrade -y
 apt-get install -y --no-install-recommends \
     curl \
     git \
+    zip \
     nginx-light \
     php-apcu \
     php7.2-phpdbg \
@@ -27,6 +28,7 @@ apt-get install -y --no-install-recommends \
     php7.2-curl \
     php7.2-fpm \
     php7.2-xml \
+    php7.2-zip \
     supervisor
 
 chmod +x /usr/local/bin/composer

@@ -11,7 +11,7 @@ LABEL org.label-schema.build-date=$BUILD_DATE \
       org.label-schema.vendor="AkerBis" \
       org.label-schema.schema-version="1.0"
 
-ENV APP_ID ""
+ENV APP_ENV "prod"
 
 VOLUME /var/www/var
 WORKDIR /var/www

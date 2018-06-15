@@ -4,21 +4,20 @@ namespace App\RequestHandler;
 
 use MaxBeckers\AmazonAlexa\Helper\ResponseHelper;
 use MaxBeckers\AmazonAlexa\Request\Request;
-use MaxBeckers\AmazonAlexa\RequestHandler\AbstractRequestHandler;
 use MaxBeckers\AmazonAlexa\Response\Directives\AudioPlayer\AudioItem;
 use MaxBeckers\AmazonAlexa\Response\Directives\AudioPlayer\PlayDirective;
 use MaxBeckers\AmazonAlexa\Response\Directives\AudioPlayer\Stream;
 use MaxBeckers\AmazonAlexa\Response\Response;
 
-class LaunchRequestHandler extends AbstractRequestHandler
+class LaunchRequestHandler extends BasicRequestHandler
 {
-    protected $responseHelper;
-    
-    public function __construct(ResponseHelper $responseHelper)
-    {
-        $this->responseHelper = $responseHelper;
+    protected $radioStreamUri;
 
-        $this->supportedApplicationIds = ['amzn1.ask.skill.b702f9fc-fe01-4fcb-bdbd-fbd85629b491'];
+    public function __construct(ResponseHelper $responseHelper, $amazonAppId = null, $radioStreamUri = null)
+    {
+        parent::__construct($responseHelper, $amazonAppId);
+
+        $this->radioStreamUri = $radioStreamUri;
     }
 
     public function supportsRequest(Request $request): bool
@@ -28,7 +27,7 @@ class LaunchRequestHandler extends AbstractRequestHandler
 
     public function handleRequest(Request $request): Response
     {
-        $stream = Stream::create("https://www.morow.com/morow.m3u", "morow.m3u");
+        $stream = Stream::create($this->radioStreamUri, md5($this->radioStreamUri));
         $audioItem = AudioItem::create($stream);
         $playDirective = PlayDirective::create($audioItem);
 

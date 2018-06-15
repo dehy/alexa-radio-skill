@@ -30,15 +30,12 @@ php() {
 }
 export -f php
 
-echo "+ Configuring project parameters"
-APP_SECRET=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
+if [ -f ".env" ]
+then
+    source .env
+fi
 
-cat << EOF > .env
-APP_ENV=${APP_ENV:-prod}
-APP_SECRET=${APP_SECRET}
-EOF
-
-if [ "${APP_RUN_MODE:-}" == "dev" ]; then
+if [ "${APP_ENV:-}" == "dev" ]; then
     gosu alexa composer install
 
     NO_DEBUG="-n --env=dev"

@@ -12,6 +12,8 @@ LABEL org.label-schema.build-date=$BUILD_DATE \
       org.label-schema.schema-version="1.0"
 
 ENV APP_ENV "prod"
+ENV AMAZON_APP_ID ""
+ENV RADIO_STREAM_URI ""
 
 VOLUME /var/www/var
 WORKDIR /var/www

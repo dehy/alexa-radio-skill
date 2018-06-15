@@ -7,5 +7,3 @@ services:
       - 8080:80
     volumes:
       - ./:/var/www
-    environment:
-      - APP_ENV=dev

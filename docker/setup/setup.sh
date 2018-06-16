@@ -41,3 +41,5 @@ chown -R alexa: /var/www
 
 apt-get -y autoremove
 apt-get clean
+
+rm -rf /usr/share/man/*

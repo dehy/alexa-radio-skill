@@ -1,0 +1,13 @@
+# Symfony
+.env
+public/bundles
+var
+vendor
+
+# Docker
+Dockerfile
+docker-compose*
+
+# git
+.gitignore
+.git

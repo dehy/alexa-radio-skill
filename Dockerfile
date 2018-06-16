@@ -15,7 +15,6 @@ ENV APP_ENV "prod"
 ENV AMAZON_APP_ID ""
 ENV RADIO_STREAM_URI ""
 
-VOLUME /var/www/var
 WORKDIR /var/www
 
 #HEALTHCHECK --interval=30s --timeout=30s --start-period=45s --retries=3 CMD [ "/usr/local/bin/healthcheck.sh" ]

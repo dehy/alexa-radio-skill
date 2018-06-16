@@ -11,8 +11,9 @@ cd "${APP_PATH}"
 export APP_ENV=prod
 
 ## Configuring frontend directories
-gosu alexa composer install -n --no-dev --optimize-autoloader --apcu-autoloader --classmap-authoritative
+gosu alexa composer -v install -n --no-dev --optimize-autoloader --apcu-autoloader --classmap-authoritative
 gosu alexa composer clear-cache
 
-rm -rf /usr/share/man/*
+rm -rf .composer .dockerignore .env .env.dist ./docker
+
 rm -rf ${ROOT_PATH}build/*

@@ -4,10 +4,10 @@ ARG BUILD_DATE
 ARG VCS_REF
 ARG VCS_BRANCH
 LABEL org.label-schema.build-date=$BUILD_DATE \
-      org.label-schema.name="MOROW for Alexa" \
-      org.label-schema.url="https://www.morow.com/" \
+      org.label-schema.name="Akerbis' Alexa Radio Skill" \
+      org.label-schema.url="https://www.akerbis.com.com/" \
       org.label-schema.vcs-ref=$VCS_REF \
-      org.label-schema.vcs-url="https://github.com/akerbis/morow-alexa" \
+      org.label-schema.vcs-url="https://gitlab.com/akerbis/alexa-radio-skill" \
       org.label-schema.vendor="AkerBis" \
       org.label-schema.schema-version="1.0"
 

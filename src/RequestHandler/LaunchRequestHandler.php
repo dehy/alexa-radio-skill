@@ -2,6 +2,7 @@
 
 namespace App\RequestHandler;
 
+use App\Config\AppConfig;
 use MaxBeckers\AmazonAlexa\Helper\ResponseHelper;
 use MaxBeckers\AmazonAlexa\Request\Request;
 use MaxBeckers\AmazonAlexa\Response\Directives\AudioPlayer\AudioItem;
@@ -11,15 +12,6 @@ use MaxBeckers\AmazonAlexa\Response\Response;
 
 class LaunchRequestHandler extends BasicRequestHandler
 {
-    protected $radioStreamUri;
-
-    public function __construct(ResponseHelper $responseHelper, $amazonAppId = null, $radioStreamUri = null)
-    {
-        parent::__construct($responseHelper, $amazonAppId);
-
-        $this->radioStreamUri = $radioStreamUri;
-    }
-
     public function supportsRequest(Request $request): bool
     {
         return $request->request instanceof \MaxBeckers\AmazonAlexa\Request\Request\Standard\LaunchRequest;
@@ -27,10 +19,19 @@ class LaunchRequestHandler extends BasicRequestHandler
 
     public function handleRequest(Request $request): Response
     {
-        $stream = Stream::create($this->radioStreamUri, md5($this->radioStreamUri));
+        $stream_uri = $this->appConfig->getParameter("stream_uri");
+
+        $stream = Stream::create($stream_uri, md5($stream_uri));
         $audioItem = AudioItem::create($stream);
         $playDirective = PlayDirective::create($audioItem);
 
-        return $this->responseHelper->directive($playDirective);
+        $introText = $this->appConfig->getHook("beforePlay", $request->request->locale);
+        if ($introText) {
+            $introText = "<speak>".$introText."</speak>";
+            $this->responseHelper->respondSsml($introText);
+        }
+        $this->responseHelper->directive($playDirective);
+
+        return $this->responseHelper->getResponse();
     }
 }

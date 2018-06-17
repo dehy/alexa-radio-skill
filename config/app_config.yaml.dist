@@ -1,0 +1,11 @@
+parameters:
+  stream_uri: https://stream_uri
+
+hooks:
+  beforePlay:
+    fr-FR: "Welcome text, dynamic field %api.live:track.title%"
+
+endpoints:
+  api.live:
+    source: https://site.com/api
+    type: json|xml

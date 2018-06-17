@@ -13,7 +13,7 @@ LABEL org.label-schema.build-date=$BUILD_DATE \
 
 ENV APP_ENV "prod"
 ENV AMAZON_APP_ID ""
-ENV RADIO_STREAM_URI ""
+ENV CONFIG_FILEPATH ""
 
 WORKDIR /var/www
 

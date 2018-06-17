@@ -30,11 +30,6 @@ php() {
 }
 export -f php
 
-if [ -f ".env" ]
-then
-    source .env
-fi
-
 if [ "${APP_ENV:-}" == "dev" ]; then
     gosu alexa composer install
 

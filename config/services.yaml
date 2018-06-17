@@ -2,7 +2,8 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     app.amazon_app_id: '%env(AMAZON_APP_ID)%'
-    app.radio_stream_uri: '%env(RADIO_STREAM_URI)%'
+    app.config_filepath: '%kernel.project_dir%/%env(CONFIG_FILEPATH)%'
+
 services:
     # default configuration for services in *this* file
     _defaults:
@@ -34,11 +35,9 @@ services:
             $amazonAppId: '%app.amazon_app_id%'
         tags: ['maxbeckers_amazon_alexa.request_handler']
 
-    App\RequestHandler\LaunchRequestHandler:
+    App\Config\AppConfig:
         arguments:
-            $amazonAppId: '%app.amazon_app_id%'
-            $radioStreamUri: '%app.radio_stream_uri%'
-        tags: ['maxbeckers_amazon_alexa.request_handler']
+            $appConfigFilepath: '%app.config_filepath%'
         
     MaxBeckers\AmazonAlexa\Helper\ResponseHelper:
         alias: maxbeckers_amazon_alexa.response_helper

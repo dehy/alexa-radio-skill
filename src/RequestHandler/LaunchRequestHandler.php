@@ -28,7 +28,7 @@ class LaunchRequestHandler extends BasicRequestHandler
         $introText = $this->appConfig->getHook("beforePlay", $request->request->locale);
         if ($introText) {
             $introText = "<speak>".$introText."</speak>";
-            $this->responseHelper->respondSsml($introText);
+            $this->responseHelper->respondSsml($introText, true);
         }
         $this->responseHelper->directive($playDirective);
 

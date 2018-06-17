@@ -1,3 +1,6 @@
+# App
+config/app_config*
+
 # Symfony
 .env
 public/bundles

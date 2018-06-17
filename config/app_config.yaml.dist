@@ -3,7 +3,13 @@ parameters:
 
 hooks:
   beforePlay:
-    fr-FR: "Welcome text, dynamic field %api.live:track.title%"
+    fr-FR: "Bienvenue! dynamic field with %api.live:track.title.path%"
+    en-US: "Welcome!"
+    en-GB: en-US
+    en-Ca: en-US
+  onAir:
+    fr-FR: "Vous écoutez %api.live:track.title%"
+    en-US: "You're listening to..."
 
 endpoints:
   api.live:

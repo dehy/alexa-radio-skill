@@ -1,5 +1,14 @@
 <?php
 
+/*******************************************************
+ * Copyright (C) 2018 Akerbis <https://www.akerbis.com>
+ *
+ * This file is part of Akerbis' Alexa Radio Skill.
+ *
+ * Akerbis' Alexa Radio Skill can not be copied, modified
+ * and/or distributed without the express permission of AkerBis
+ *******************************************************/
+
 namespace App\Config;
 
 use Psr\Log\LoggerInterface;

@@ -84,94 +84,32 @@ class AppConfig
             $this->logger->debug("data: ".print_r($data, true));
 
             foreach ($paths as $path) {
-                $this->logger->debug("the string: ".$string);
-                $pathRoad = \explode(".", $path);
-                $foundData = $data;
-                foreach ($pathRoad as $pathStep) {
-                    if (!$foundData || \is_string($foundData)) {
-                        $foundData = null;
-                        break;
+                $updatedStringPart = "";
+                $this->logger->debug("reminder, the string: ".$string);
+                if ($this->parseConditionPass($path)) { // Check if syntax has a "?" and if it passes
+                    $pathRoad = \explode(".", $path);
+                    $filteredData = $data;
+                    foreach ($pathRoad as $pathStep) {
+                        if (!$filteredData) {
+                            $filteredData = null;
+                            break;
+                        }
+                        if (is_array($filteredData) && \array_key_exists($pathStep, $filteredData)) {
+                            $filteredData = $filteredData[$pathStep];
+                        }
                     }
-                    $foundData = $foundData[$pathStep];
-                }
-                $tag = '%'.$endpoint.':'.$path.'%';
+                    $tag = '%'.$endpoint.':'.$path.'%';
 
-                $this->logger->debug("$tag => $foundData");
+                    $stringPart = $this->parseExtractStringForTag($tag, $string, $path, $filteredData);
+                    if ($filteredData) {
+                        $updatedStringPart = \preg_replace("/$tag/", $filteredData, $stringPart);
+                        $updatedStringPart = \mb_substr($updatedStringPart, 1); // Removes {
+                        $updatedStringPart = \mb_substr($updatedStringPart, 0, \mb_strlen($updatedStringPart)-1); // Removes }
+                    } else {
+                        $updatedStringPart = "";
+                    }
+                }
                 
-                // Find $tag position
-                \preg_match($tag, $string, $matches, \PREG_OFFSET_CAPTURE);
-                if (!$matches) {
-                    continue;
-                }
-                $tagPos = $matches[0][1];
-
-                $this->logger->debug("tag starts at pos ".$tagPos);
-
-                $openingBracketPos = null;
-                $closingBracketPos = null;
-
-                // Find starting bracket
-                $closingBrCount = 0;
-                $pos = $tagPos;
-                for ($pos; $pos >= 0; $pos--) {
-                    $chr = \mb_substr($string, $pos, 1);
-                    if ($chr === "}") {
-                        $closingBrCount += 1;
-                        continue;
-                    }
-                    if ($chr === "{") {
-                        if ($closingBrCount > 0) {
-                            $closingBrCount -= 1;
-                            continue;
-                        }
-                        $openingBracketPos = $pos;
-                        break;
-                    }
-                }
-
-                $this->logger->debug("bracket opens at pos ".$openingBracketPos);
-
-                $openingBrCount = 0;
-                $pos = $openingBracketPos;
-                $maxPos = \mb_strlen($string) - 1;
-                $this->logger->debug("string part max size: ".$maxPos);
-                for ($pos; $pos <= $maxPos; $pos++) {
-                    $chr = \mb_substr($string, $pos, 1);
-                    $this->logger->debug("chr=".$chr."; pos=".$pos);
-                    if ($chr === "{") {
-                        $openingBrCount += 1;
-                        $this->logger->debug("openingBrCount=".$openingBrCount);
-                        continue;
-                    }
-                    if ($chr === "}") {
-                        if ($openingBrCount > 0) {
-                            $openingBrCount -= 1;
-                            $this->logger->debug("openingBrCount=".$openingBrCount);
-                            if ($openingBrCount === 0) {
-                                $closingBracketPos = $pos;
-                                break;
-                            }
-                            continue;
-                        }
-                        break;
-                    }
-                }
-
-                $this->logger->debug("bracket closes at pos ".$closingBracketPos);
-
-                $stringPartLength = $closingBracketPos - $openingBracketPos + 1;
-                $this->logger->debug("string part length: ".$stringPartLength);
-                $stringPart = \mb_substr($string, $openingBracketPos, $stringPartLength);
-                $this->logger->debug("string part: ".$stringPart);
-
-                $updatedStringPart = $stringPart;
-                if ($foundData) {
-                    $updatedStringPart = \preg_replace("/$tag/", $foundData, $stringPart);
-                    $updatedStringPart = \mb_substr($updatedStringPart, 1); // Removes {
-                    $updatedStringPart = \mb_substr($updatedStringPart, 0, \mb_strlen($updatedStringPart)-1); // Removes }
-                } else {
-                    $updatedStringPart = "";
-                }
                 $this->logger->debug("updated string part: ".$updatedStringPart);
 
                 $string = \preg_replace("/$stringPart/", $updatedStringPart, $string);
@@ -179,6 +117,96 @@ class AppConfig
 
             return $string;
         }
+    }
+
+    private function parseConditionPass($condition): bool
+    {
+        if (\mb_substr($condition, 0, 1) !== "?") {
+            $this->logger->debug("'$condition' is not a test => pass");
+            return true;
+        }
+        $this->logger->debug("'$condition' is a test");
+        $condition = \mb_substr($condition, 1);
+
+        $conditionParts = \preg_split("/<(<=)>(>=)(==)/", $condition, null, \PREG_SPLIT_NO_EMPTY);
+        $this->logger->debug("condition parts: ".print_r($conditionParts, true));
+        $this->logger->debug("left: ".$conditionParts[0]);
+        $this->logger->debug("right: ".$conditionParts[1]);
+
+        return false;
+    }
+
+    private function parseExtractStringForTag(string $tag, string $string, string $path, ?string $data): string
+    {
+        $this->logger->debug("$tag => $data");
+        
+        // Find $tag position
+        \preg_match($tag, $string, $matches, \PREG_OFFSET_CAPTURE);
+        if (!$matches) {
+            return "";
+        }
+        $tagPos = $matches[0][1];
+
+        $this->logger->debug("tag starts at pos ".$tagPos);
+
+        $openingBracketPos = null;
+        $closingBracketPos = null;
+
+        // Find starting bracket
+        $closingBrCount = 0;
+        $pos = $tagPos;
+        for ($pos; $pos >= 0; $pos--) {
+            $chr = \mb_substr($string, $pos, 1);
+            if ($chr === "}") {
+                $closingBrCount += 1;
+                continue;
+            }
+            if ($chr === "{") {
+                if ($closingBrCount > 0) {
+                    $closingBrCount -= 1;
+                    continue;
+                }
+                $openingBracketPos = $pos;
+                break;
+            }
+        }
+
+        $this->logger->debug("bracket opens at pos ".$openingBracketPos);
+
+        $openingBrCount = 0;
+        $pos = $openingBracketPos;
+        $maxPos = \mb_strlen($string) - 1;
+        //$this->logger->debug("string part max size: ".$maxPos);
+        for ($pos; $pos <= $maxPos; $pos++) {
+            $chr = \mb_substr($string, $pos, 1);
+            $this->logger->debug("chr=".$chr."; pos=".$pos);
+            if ($chr === "{") {
+                $openingBrCount += 1;
+                //$this->logger->debug("openingBrCount=".$openingBrCount);
+                continue;
+            }
+            if ($chr === "}") {
+                if ($openingBrCount > 0) {
+                    $openingBrCount -= 1;
+                    //$this->logger->debug("openingBrCount=".$openingBrCount);
+                    if ($openingBrCount === 0) {
+                        $closingBracketPos = $pos;
+                        break;
+                    }
+                    continue;
+                }
+                break;
+            }
+        }
+
+        $this->logger->debug("bracket closes at pos ".$closingBracketPos);
+
+        $stringPartLength = $closingBracketPos - $openingBracketPos + 1;
+        $this->logger->debug("string part length: ".$stringPartLength);
+        $stringPart = \mb_substr($string, $openingBracketPos, $stringPartLength);
+        $this->logger->debug("string part: ".$stringPart);
+
+        return $stringPart;
     }
 
     private function fetch(string $endpoint, string $type): array

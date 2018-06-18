@@ -29,6 +29,7 @@ apt-get install -y --no-install-recommends \
     php7.2-fpm \
     php7.2-xml \
     php7.2-zip \
+    php7.2-mbstring \
     supervisor
 
 chmod +x /usr/local/bin/composer

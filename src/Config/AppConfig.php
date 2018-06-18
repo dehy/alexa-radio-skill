@@ -16,7 +16,7 @@ use Symfony\Component\Yaml\Yaml;
 
 class AppConfig
 {
-    const LOCALES = ["fr-FR", "en-US", "en-GB", "en-CA"];
+    const LOCALES = ["de-DE", "en-CA", "en-GB", "en-US", "fr-FR"];
 
     private $logger;
 

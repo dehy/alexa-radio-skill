@@ -112,8 +112,10 @@ class AppConfig
                     $stringPart = $this->parseExtractStringForTag($tag, $string, $path, $filteredData);
                     if ($filteredData) {
                         $updatedStringPart = \preg_replace("/$tag/", $filteredData, $stringPart);
-                        $updatedStringPart = \mb_substr($updatedStringPart, 1); // Removes {
-                        $updatedStringPart = \mb_substr($updatedStringPart, 0, \mb_strlen($updatedStringPart)-1); // Removes }
+                        if (\mb_substr($updatedStringPart, 0, 1) == "{") {
+                            $updatedStringPart = \mb_substr($updatedStringPart, 1); // Removes {
+                            $updatedStringPart = \mb_substr($updatedStringPart, 0, \mb_strlen($updatedStringPart)-1); // Removes }
+                        }
                     } else {
                         $updatedStringPart = "";
                     }
@@ -121,6 +123,7 @@ class AppConfig
                 
                 $this->logger->debug("updated string part: ".$updatedStringPart);
 
+                $stringPart = preg_quote($stringPart, "/");
                 $string = \preg_replace("/$stringPart/", $updatedStringPart, $string);
             }
 
@@ -188,7 +191,7 @@ class AppConfig
         //$this->logger->debug("string part max size: ".$maxPos);
         for ($pos; $pos <= $maxPos; $pos++) {
             $chr = \mb_substr($string, $pos, 1);
-            $this->logger->debug("chr=".$chr."; pos=".$pos);
+            //$this->logger->debug("chr=".$chr."; pos=".$pos);
             if ($chr === "{") {
                 $openingBrCount += 1;
                 //$this->logger->debug("openingBrCount=".$openingBrCount);
@@ -210,6 +213,9 @@ class AppConfig
 
         $this->logger->debug("bracket closes at pos ".$closingBracketPos);
 
+        if ($openingBracketPos === null || $closingBracketPos === null) {
+            return $string;
+        }
         $stringPartLength = $closingBracketPos - $openingBracketPos + 1;
         $this->logger->debug("string part length: ".$stringPartLength);
         $stringPart = \mb_substr($string, $openingBracketPos, $stringPartLength);

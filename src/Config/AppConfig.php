@@ -224,7 +224,7 @@ class AppConfig
         return $stringPart;
     }
 
-    private function fetch(string $endpoint, string $type): array
+    private function fetch(string $endpoint, string $type): ?array
     {
         $ch = \curl_init();
         \curl_setopt($ch, CURLOPT_URL, $endpoint);
@@ -242,20 +242,32 @@ class AppConfig
         \curl_close($ch);
 
         if ($response === false) {
-            return "";
+            return null;
         }
 
         try {
             if ($type === "json") {
                 $data = \json_decode($response, true);
+                if ($data === null && \json_last_error() !== \JSON_ERROR_NONE) {
+                    return null;
+                }
             }
             if ($type === "xml") {
                 $xml = \simplexml_load_string($response, "SimpleXMLElement", LIBXML_NOCDATA);
+                if ($xml === false) {
+                    return null;
+                }
                 $json = \json_encode($xml);
+                if ($json === false) {
+                    return null;
+                }
                 $data = \json_decode($json, true);
+                if ($data === null && \json_last_error() !== \JSON_ERROR_NONE) {
+                    return null;
+                }
             }
         } catch (\Exception $e) {
-            return $string;
+            return null;
         }
 
         return $data;

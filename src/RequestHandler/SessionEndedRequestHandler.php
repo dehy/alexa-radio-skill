@@ -12,15 +12,24 @@
 namespace App\RequestHandler;
 
 use MaxBeckers\AmazonAlexa\Request\Request;
+use MaxBeckers\AmazonAlexa\Request\Request\Standard\SessionEndedRequest;
 use MaxBeckers\AmazonAlexa\Response\Response;
 
 class SessionEndedRequestHandler extends BasicRequestHandler
 {
+    /**
+     * @param Request $request
+     * @return bool
+     */
     public function supportsRequest(Request $request): bool
     {
-        return $request->request instanceof \MaxBeckers\AmazonAlexa\Request\Request\Standard\SessionEndedRequest;
+        return $request->request instanceof SessionEndedRequest;
     }
 
+    /**
+     * @param Request $request
+     * @return Response
+     */
     public function handleRequest(Request $request): Response
     {
         return $this->responseHelper->getResponse();

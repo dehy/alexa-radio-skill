@@ -12,8 +12,8 @@
 namespace App\RequestHandler;
 
 use MaxBeckers\AmazonAlexa\Request\Request;
+use MaxBeckers\AmazonAlexa\Request\Request\Standard\IntentRequest;
 use MaxBeckers\AmazonAlexa\Response\Directives\AudioPlayer\StopDirective;
-use MaxBeckers\AmazonAlexa\Response\Directives\AudioPlayer\ClearDirective;
 use MaxBeckers\AmazonAlexa\Response\Response;
 
 class PauseStopIntentHandler extends BasicRequestHandler
@@ -23,12 +23,20 @@ class PauseStopIntentHandler extends BasicRequestHandler
         "AMAZON.StopIntent"
     ];
 
+    /**
+     * @param Request $request
+     * @return bool
+     */
     public function supportsRequest(Request $request): bool
     {
-        return $request->request instanceof \MaxBeckers\AmazonAlexa\Request\Request\Standard\IntentRequest
+        return $request->request instanceof IntentRequest
             && in_array($request->request->intent->name, $this->handledIntentNames);
     }
 
+    /**
+     * @param Request $request
+     * @return Response
+     */
     public function handleRequest(Request $request): Response
     {
         $stopDirective = StopDirective::create();

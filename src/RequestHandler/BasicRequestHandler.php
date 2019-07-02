@@ -19,7 +19,13 @@ abstract class BasicRequestHandler extends AbstractRequestHandler
 {
     protected $responseHelper;
     protected $appConfig;
-    
+
+    /**
+     * BasicRequestHandler constructor.
+     * @param ResponseHelper $responseHelper
+     * @param AppConfig $appConfig
+     * @param null $amazonAppId
+     */
     public function __construct(ResponseHelper $responseHelper, AppConfig $appConfig, $amazonAppId = null)
     {
         $this->responseHelper = $responseHelper;

@@ -2,7 +2,8 @@
 config/app_config*
 
 # Symfony
-.env
+.env.local
+.env.local.php
 public/bundles
 var
 vendor

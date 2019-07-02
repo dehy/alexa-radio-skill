@@ -11,10 +11,6 @@ LABEL org.label-schema.build-date=$BUILD_DATE \
       org.label-schema.vendor="AkerBis" \
       org.label-schema.schema-version="1.0"
 
-ENV APP_ENV "prod"
-ENV AMAZON_APP_ID ""
-ENV CONFIG_FILEPATH ""
-
 WORKDIR /var/www
 
 #HEALTHCHECK --interval=30s --timeout=30s --start-period=45s --retries=3 CMD [ "/usr/local/bin/healthcheck.sh" ]

@@ -11,7 +11,9 @@
 
 namespace App\RequestHandler;
 
+use Exception;
 use MaxBeckers\AmazonAlexa\Request\Request;
+use MaxBeckers\AmazonAlexa\Request\Request\Standard\IntentRequest;
 use MaxBeckers\AmazonAlexa\Response\Directives\AudioPlayer\AudioItem;
 use MaxBeckers\AmazonAlexa\Response\Directives\AudioPlayer\PlayDirective;
 use MaxBeckers\AmazonAlexa\Response\Directives\AudioPlayer\Stream;
@@ -23,12 +25,21 @@ class ResumeIntentHandler extends BasicRequestHandler
         "AMAZON.ResumeIntent"
     ];
 
+    /**
+     * @param Request $request
+     * @return bool
+     */
     public function supportsRequest(Request $request): bool
     {
-        return $request->request instanceof \MaxBeckers\AmazonAlexa\Request\Request\Standard\IntentRequest
+        return $request->request instanceof IntentRequest
             && in_array($request->request->intent->name, $this->handledIntentNames);
     }
 
+    /**
+     * @param Request $request
+     * @return Response
+     * @throws Exception
+     */
     public function handleRequest(Request $request): Response
     {
         $stream_uri = $this->appConfig->getParameter("stream_uri");

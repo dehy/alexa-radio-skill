@@ -11,9 +11,9 @@
 
 namespace App\RequestHandler;
 
-use App\Config\AppConfig;
-use MaxBeckers\AmazonAlexa\Helper\ResponseHelper;
+use Exception;
 use MaxBeckers\AmazonAlexa\Request\Request;
+use MaxBeckers\AmazonAlexa\Request\Request\Standard\LaunchRequest;
 use MaxBeckers\AmazonAlexa\Response\Directives\AudioPlayer\AudioItem;
 use MaxBeckers\AmazonAlexa\Response\Directives\AudioPlayer\PlayDirective;
 use MaxBeckers\AmazonAlexa\Response\Directives\AudioPlayer\Stream;
@@ -21,11 +21,20 @@ use MaxBeckers\AmazonAlexa\Response\Response;
 
 class LaunchRequestHandler extends BasicRequestHandler
 {
+    /**
+     * @param Request $request
+     * @return bool
+     */
     public function supportsRequest(Request $request): bool
     {
-        return $request->request instanceof \MaxBeckers\AmazonAlexa\Request\Request\Standard\LaunchRequest;
+        return $request->request instanceof LaunchRequest;
     }
 
+    /**
+     * @param Request $request
+     * @return Response
+     * @throws Exception
+     */
     public function handleRequest(Request $request): Response
     {
         $stream_uri = $this->appConfig->getParameter("stream_uri");

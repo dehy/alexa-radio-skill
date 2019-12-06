@@ -45,7 +45,13 @@ class AppConfig
 
     private $parameters;
     private $hooks;
+    private $metadatas;
     private $endpoints;
+
+    // Cache for requests
+    private $fetchCache = [];
+    // Cache for datas
+    private $cache = [];
 
     public function __construct(LoggerInterface $logger, string $appConfigFilepath)
     {
@@ -55,9 +61,10 @@ class AppConfig
             $appConfig = Yaml::parseFile($appConfigFilepath);
             $this->parameters = $appConfig["parameters"];
             $this->hooks = $appConfig["hooks"];
+            $this->metadatas = $appConfig["metadatas"];
             $this->endpoints = $appConfig["endpoints"];
         } catch (ParseException $exception) {
-            printf('Unable to parse the YAML string: %s', $exception->getMessage());
+            $logger->critical(printf('Unable to parse the YAML string: %s', $exception->getMessage()));
         }
     }
 
@@ -83,6 +90,16 @@ class AppConfig
         return $this->parse($sentence);
     }
 
+    public function getMetadata(string $metadataName): ?string
+    {
+        if (!array_key_exists($metadataName, $this->metadatas)) {
+            throw new Exception("Invalid metadata '$metadataName'");
+        }
+
+        $sentence = $this->metadatas[$metadataName];
+        return $this->parse($sentence);
+    }
+
     /**
      * @param string $parameterName
      * @return string
@@ -102,18 +119,27 @@ class AppConfig
      * @return string
      * @throws Exception
      */
-    private function parse(string $string): string
+    private function parse(?string $string): ?string
     {
         $this->logger->debug("The string is '$string'");
+        if ($string === null) {
+            return null;
+        }
 
         $tags = [];
-        if (!preg_match_all("/%([^ %]+)%/", $string, $tags, PREG_SET_ORDER)) {
+        if (!preg_match_all('/%([^%]+)%/', $string, $tags, PREG_SET_ORDER)) {
             return $string;
         }
 
         $endpoints = [];
         foreach ($tags as $tag) {
-            list($endpoint, $path) = explode(":", $tag[1]);
+            $tagValue = $tag[1];
+            $this->logger->debug("The tag is '$tagValue'");
+            if (array_key_exists($tagValue, $this->cache)) {
+                $this->logger->debug("Found tag '$tagValue' in cache");
+                return $this->cache[$tagValue];
+            }
+            list($endpoint, $path) = explode(":", $tagValue);
             if (!array_key_exists($endpoint, $this->endpoints)) {
                 throw new Exception("Undefined endpoint '$endpoint'");
             }
@@ -127,7 +153,13 @@ class AppConfig
 
             $type = $this->endpoints[$endpoint]["type"];
             $source = $this->endpoints[$endpoint]["source"];
-            $data = $this->fetch($source, $type);
+            $cacheKey = base64_encode("$source.$type");
+            if (array_key_exists($cacheKey, $this->fetchCache)) {
+                $data = $this->fetchCache[$cacheKey];
+            } else {
+                $data = $this->fetch($source, $type);
+                $this->fetchCache[$cacheKey] = $data;
+            }
 
             $this->logger->debug("data: ".print_r($data, true));
 
@@ -159,6 +191,7 @@ class AppConfig
                     } else {
                         $updatedStringPart = "";
                     }
+                    $this->cache[$tag] = $filteredData;
                 }
                 
                 $this->logger->debug("updated string part: ".$updatedStringPart);

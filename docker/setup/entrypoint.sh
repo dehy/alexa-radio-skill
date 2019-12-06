@@ -26,7 +26,7 @@ if [ "${2:-}" == "coverage" ]; then
 fi
 
 php() {
-    /usr/local/bin/gosu alexa /usr/bin/php -c /etc/php/7.2/fpm/php.ini "$@"
+    /usr/local/bin/gosu alexa /usr/bin/php -c /etc/php/7.4/fpm/php.ini "$@"
 }
 export -f php
 

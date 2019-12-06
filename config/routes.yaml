@@ -3,4 +3,4 @@
 #    controller: App\Controller\DefaultController::index
 maxbeckers_amazon_alexa:
     path:     /alexa/ # the url, the alexa endpoint should be available 
-    defaults: { _controller: MaxBeckersAmazonAlexaBundle:AmazonAlexa:amazonRequest }
+    defaults: { _controller: MaxBeckers\AmazonAlexaBundle\Controller\AmazonAlexaController::amazonRequestAction }

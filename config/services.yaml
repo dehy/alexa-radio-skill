@@ -3,6 +3,7 @@
 parameters:
     app.amazon_app_id: '%env(AMAZON_APP_ID)%'
     app.config_filepath: '%kernel.project_dir%/%env(CONFIG_FILEPATH)%'
+    app.fallback_url: '%env(FALLBACK_URL)%'
 
 services:
     # default configuration for services in *this* file

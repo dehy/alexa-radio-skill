@@ -1,6 +1,9 @@
-#index:
-#    path: /
-#    controller: App\Controller\DefaultController::index
+index:
+    path: /
+    controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController
+    defaults:
+        # this value can be an absolute path or an absolute URL
+        path: '%app.fallback_url%'
 maxbeckers_amazon_alexa:
     path:     /alexa/ # the url, the alexa endpoint should be available 
     defaults: { _controller: MaxBeckers\AmazonAlexaBundle\Controller\AmazonAlexaController::amazonRequestAction }

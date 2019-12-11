@@ -1,15 +1,26 @@
 parameters:
-  stream_uri: https://stream_uri
+  audio_stream_uri: https://stream_uri
+  video_stream_uri: null
 
 hooks:
-  beforePlay:
+  beforePlayAudio:
     fr-FR: "Bienvenue! dynamic field with %api.live:track.title.path%"
     en-US: "Welcome!"
     en-GB: en-US
     en-Ca: en-US
-  onAir:
+  beforePlayVideo:
+    fr-FR: "Magneto Serge !"
+  onAirAudio:
     fr-FR: "Vous écoutez %api.live:track.title%"
     en-US: "You're listening to..."
+  onAirVideo:
+    fr-FR: ""
+
+metadatas:
+  title: "%api.live:title%"
+  subtitle: "%api.live:animateur%"
+  art: "%api.live:image%"
+  backgroundImage: null
 
 endpoints:
   api.live:

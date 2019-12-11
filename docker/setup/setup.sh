@@ -21,6 +21,7 @@ apt-get install -y --no-install-recommends \
     curl \
     git \
     zip \
+    unzip \
     nginx-light \
     php-apcu \
     php7.4-phpdbg \

@@ -11,18 +11,17 @@
 
 namespace App\RequestHandler;
 
+use App\Helper\DirectiveHelper;
 use Exception;
 use MaxBeckers\AmazonAlexa\Request\Request;
 use MaxBeckers\AmazonAlexa\Request\Request\Standard\IntentRequest;
-use MaxBeckers\AmazonAlexa\Response\Directives\AudioPlayer\AudioItem;
-use MaxBeckers\AmazonAlexa\Response\Directives\AudioPlayer\PlayDirective;
-use MaxBeckers\AmazonAlexa\Response\Directives\AudioPlayer\Stream;
 use MaxBeckers\AmazonAlexa\Response\Response;
 
 class ResumeIntentHandler extends BasicRequestHandler
 {
     protected $handledIntentNames = [
-        "AMAZON.ResumeIntent"
+        "AMAZON.ResumeIntent",
+        "AMAZON.StartOverIntent",
     ];
 
     /**
@@ -42,13 +41,15 @@ class ResumeIntentHandler extends BasicRequestHandler
      */
     public function handleRequest(Request $request): Response
     {
-        $stream_uri = $this->appConfig->getParameter("stream_uri");
+        $supportedInterfaces = array_keys($request->context->system->device->supportedInterfaces);
+        if (in_array("VideoApp", $supportedInterfaces)) {
+            $directive = DirectiveHelper::videoLaunchDirectiveWithConfig($this->appConfig);
+            $this->responseHelper->responseBody->shouldEndSession = null;
+        } elseif (in_array("AudioPlayer", $supportedInterfaces)) {
+            $directive = DirectiveHelper::playDirectiveWithConfig($this->appConfig);
 
-        $stream = Stream::create($stream_uri, md5($stream_uri));
-        $audioItem = AudioItem::create($stream);
-        $playDirective = PlayDirective::create($audioItem);
-
-        $this->responseHelper->directive($playDirective);
+        }
+        $this->responseHelper->directive($directive);
 
         return $this->responseHelper->getResponse();
     }

@@ -16,10 +16,16 @@ use MaxBeckers\AmazonAlexa\Request\Request;
 use MaxBeckers\AmazonAlexa\Request\Request\Standard\IntentRequest;
 use MaxBeckers\AmazonAlexa\Response\Response;
 
-class OnAirIntentHandler extends BasicRequestHandler
+class UnavailableIntentHandler extends BasicRequestHandler
 {
     protected $handledIntentNames = [
-        "OnAirIntent"
+        "AMAZON.NextIntent",
+        "AMAZON.PreviousIntent",
+        "AMAZON.RepeatIntent",
+        "AMAZON.LoopOffIntent",
+        "AMAZON.ShuffleOffIntent",
+        "AMAZON.HelpIntent",
+        "AMAZON.NavigateHomeIntent",
     ];
 
     /**
@@ -39,15 +45,12 @@ class OnAirIntentHandler extends BasicRequestHandler
      */
     public function handleRequest(Request $request): Response
     {
-        $supportedInterfaces = array_keys($request->context->system->device->supportedInterfaces);
         $locale = $request->request->locale;
-        if (in_array("VideoApp", $supportedInterfaces)) {
-            $onAirText = "<speak>".$this->appConfig->getHook("onAirVideo", $locale)."</speak>";
-            $this->responseHelper->responseBody->shouldEndSession = null;
-        } elseif (in_array("AudioPlayer", $supportedInterfaces)) {
-            $onAirText = "<speak>".$this->appConfig->getHook("onAirAudio", $locale)."</speak>";
+        $unavailableText = $this->appConfig->getHook("nextPreviousRepeatWarning", $locale);
+        if ($unavailableText) {
+            $unavailableText = "<speak>".$unavailableText."</speak>";
+            $this->responseHelper->respondSsml($unavailableText, true);
         }
-        $this->responseHelper->respondSsml($onAirText, true);
 
         return $this->responseHelper->getResponse();
     }

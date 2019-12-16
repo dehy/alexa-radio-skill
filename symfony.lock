@@ -1,4 +1,7 @@
 {
+    "cweagans/composer-patches": {
+        "version": "1.6.7"
+    },
     "guzzlehttp/guzzle": {
         "version": "6.4.1"
     },

@@ -22,6 +22,7 @@ apt-get install -y --no-install-recommends \
     git \
     zip \
     unzip \
+    patch \
     nginx-light \
     php-apcu \
     php7.3-phpdbg \

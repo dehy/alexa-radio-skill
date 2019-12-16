@@ -1,0 +1,7 @@
+{
+    "patches": {
+        "maxbeckers/amazon-alexa-php": {
+            "Amazon Alexa Certification Failure": "patches/maxbeckers/amazon-alexa-php/fix-missing-header-exception.patch"
+        }
+    }
+}

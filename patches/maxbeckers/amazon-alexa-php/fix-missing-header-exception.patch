@@ -1,0 +1,11 @@
+--- src/Request/Request.php	2019-12-16 09:45:35.000000000 +0000
++++ src/Request/Request.php	2019-12-16 09:43:58.000000000 +0000
+@@ -125,7 +125,7 @@
+ 
+         if ($request->request->validateSignature()) {
+             if (!$request->signatureCertChainUrl || !$request->signature) {
+-                throw new MissingRequiredHeaderException();
++                // throw new MissingRequiredHeaderException();
+             }
+         }
+ 

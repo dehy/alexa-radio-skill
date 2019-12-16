@@ -9,6 +9,7 @@
         "ext-json": "*",
         "ext-libxml": "*",
         "ext-simplexml": "*",
+        "cweagans/composer-patches": "^1.6",
         "maxbeckers/amazon-alexa-bundle": "^1.0.1",
         "symfony/console": "4.4.*",
         "symfony/dotenv": "4.4.*",
@@ -63,6 +64,8 @@
         "symfony": {
             "allow-contrib": false,
             "require": "4.4.*"
-        }
+        },
+        "patches-file": "composer.patches.json",
+        "composer-exit-on-patch-failure": true
     }
 }

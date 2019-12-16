@@ -24,13 +24,13 @@ apt-get install -y --no-install-recommends \
     unzip \
     nginx-light \
     php-apcu \
-    php7.4-phpdbg \
-    php7.4-cli \
-    php7.4-curl \
-    php7.4-fpm \
-    php7.4-xml \
-    php7.4-zip \
-    php7.4-mbstring \
+    php7.3-phpdbg \
+    php7.3-cli \
+    php7.3-curl \
+    php7.3-fpm \
+    php7.3-xml \
+    php7.3-zip \
+    php7.3-mbstring \
     supervisor
 
 chmod +x /usr/local/bin/composer

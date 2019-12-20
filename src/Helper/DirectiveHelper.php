@@ -43,7 +43,7 @@ class DirectiveHelper
         }
         $metadata = AudioMetadata::create($title, $subtitle, $art, $backgroundImage);
 
-        $stream = Stream::create($stream_uri, md5($stream_uri));
+        $stream = Stream::create($stream_uri, md5($title.$subtitle));
         $audioItem = AudioItem::create($stream, $metadata);
         return PlayDirective::create($audioItem);
     }

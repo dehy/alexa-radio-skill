@@ -37,7 +37,7 @@ class LaunchRequestHandler extends BasicRequestHandler
     {
         $supportedInterfaces = array_keys($request->context->system->device->supportedInterfaces);
         $locale = $request->request->locale;
-        if (in_array("VideoApp", $supportedInterfaces)) {
+        if (in_array("VideoApp", $supportedInterfaces) && true === DirectiveHelper::videoStreamIsAvailable($this->appConfig)) {
             $this->handleVideoRequest($locale);
             $this->responseHelper->responseBody->shouldEndSession = null;
         } elseif (in_array("AudioPlayer", $supportedInterfaces)) {

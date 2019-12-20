@@ -11,6 +11,7 @@
 
 namespace App\RequestHandler;
 
+use App\Helper\DirectiveHelper;
 use Exception;
 use MaxBeckers\AmazonAlexa\Request\Request;
 use MaxBeckers\AmazonAlexa\Request\Request\Standard\IntentRequest;
@@ -41,7 +42,8 @@ class OnAirIntentHandler extends BasicRequestHandler
     {
         $supportedInterfaces = array_keys($request->context->system->device->supportedInterfaces);
         $locale = $request->request->locale;
-        if (in_array("VideoApp", $supportedInterfaces)) {
+        $onAirText = "";
+        if (in_array("VideoApp", $supportedInterfaces) && true === DirectiveHelper::videoStreamIsAvailable($this->appConfig)) {
             $onAirText = "<speak>".$this->appConfig->getHook("onAirVideo", $locale)."</speak>";
             $this->responseHelper->responseBody->shouldEndSession = null;
         } elseif (in_array("AudioPlayer", $supportedInterfaces)) {

@@ -41,8 +41,9 @@ class ResumeIntentHandler extends BasicRequestHandler
      */
     public function handleRequest(Request $request): Response
     {
+        $directive = null;
         $supportedInterfaces = array_keys($request->context->system->device->supportedInterfaces);
-        if (in_array("VideoApp", $supportedInterfaces)) {
+        if (in_array("VideoApp", $supportedInterfaces) && true === DirectiveHelper::videoStreamIsAvailable($this->appConfig)) {
             $directive = DirectiveHelper::videoLaunchDirectiveWithConfig($this->appConfig);
             $this->responseHelper->responseBody->shouldEndSession = null;
         } elseif (in_array("AudioPlayer", $supportedInterfaces)) {

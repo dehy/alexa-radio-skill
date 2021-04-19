@@ -1,13 +1,24 @@
 <?php
 
-/*******************************************************
- * Copyright (C) 2018 Akerbis <https://www.akerbis.com>
+/*
+ * Alexa Radio Skill - An Alexa Skill for your own webradio
+ * Copyright (C) 2021 Arnaud de Mouhy
  *
- * This file is part of Akerbis' Alexa Radio Skill.
+ * This file is part of Alexa Radio Skill.
  *
- * Akerbis' Alexa Radio Skill can not be copied, modified
- * and/or distributed without the express permission of AkerBis
- *******************************************************/
+ * Alexa Radio Skill is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Alexa Radio Skill is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Alexa Radio Skill.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 namespace App\Config;
 

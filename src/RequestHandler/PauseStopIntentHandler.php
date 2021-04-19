@@ -20,7 +20,8 @@ class PauseStopIntentHandler extends BasicRequestHandler
 {
     protected $handledIntentNames = [
         "AMAZON.PauseIntent",
-        "AMAZON.StopIntent"
+        "AMAZON.StopIntent",
+        "AMAZON.CancelIntent"
     ];
 
     /**

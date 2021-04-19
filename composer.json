@@ -1,4 +1,6 @@
 {
+    "name": "dehy/alexa-radio-skill",
+    "description": "An Alexa Skill for your webradio!",
     "type": "project",
     "license": "GPL-3.0-only",
     "require": {

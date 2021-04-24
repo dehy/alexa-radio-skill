@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM ubuntu:20.10
 
 ARG BUILD_DATE
 ARG VCS_REF

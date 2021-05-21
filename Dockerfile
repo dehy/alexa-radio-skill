@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM ubuntu:groovy-20210416
 
 ARG BUILD_DATE
 ARG VCS_REF
